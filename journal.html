@@ -54,14 +54,15 @@
 
     logoutBtn.addEventListener('click', () => auth.signOut());
 
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        currentUser = user;
-        loadEntries();
-      } else {
-        window.location.href = "/login.html"; // Replace with your login page
-      }
-    });
+auth.onAuthStateChanged(user => {
+  if (user) {
+    console.log("Logged in as", user.uid);
+    currentUser = user;
+    loadEntries();
+  } else {
+    window.location.href = "/login.html";
+  }
+});
 
     function loadEntries() {
       db.collection("notes").doc(currentUser.uid).collection("entries").orderBy("timestamp", "desc")
@@ -86,22 +87,30 @@
       deleteBtn.style.display = "block";
     }
 
-    saveBtn.onclick = async () => {
-      const title = titleInput.value.trim();
-      const content = contentInput.value.trim();
-      if (!title || !content) return;
-      const data = { title, content, timestamp: new Date() };
-      if (currentEntryId) {
-        await db.collection("notes").doc(currentUser.uid).collection("entries").doc(currentEntryId).set(data);
-      } else {
-        await db.collection("notes").doc(currentUser.uid).collection("entries").add(data);
-      }
-      titleInput.value = "";
-      contentInput.value = "";
-      currentEntryId = null;
-      formTitle.textContent = "New Entry";
-      deleteBtn.style.display = "none";
-    };
+saveBtn.onclick = async () => {
+  const title = titleInput.value.trim();
+  const content = contentInput.value.trim();
+  if (!title || !content) return;
+
+  const data = { title, content, timestamp: new Date() };
+
+  try {
+    if (currentEntryId) {
+      await db.collection("notes").doc(currentUser.uid).collection("entries").doc(currentEntryId).set(data);
+    } else {
+      await db.collection("notes").doc(currentUser.uid).collection("entries").add(data);
+    }
+
+    titleInput.value = "";
+    contentInput.value = "";
+    currentEntryId = null;
+    formTitle.textContent = "New Entry";
+    deleteBtn.style.display = "none";
+  } catch (err) {
+    console.error("Error saving entry:", err);
+    alert("Failed to save entry. Check console for details.");
+  }
+};
 
     deleteBtn.onclick = async () => {
       if (currentEntryId) {
