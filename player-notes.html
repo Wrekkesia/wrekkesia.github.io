@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Player Notes - Wrekkesia</title>
+</head>
+<body style="background:#111;color:#fff;font-family:sans-serif;padding:2rem">
+
+  <h1>📘 Player Notes</h1>
+  <p>Only you can see your notes.</p>
+
+  <div id="login-section">
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="notes-section" style="display:none;">
+    <textarea id="player-notes" rows="10" cols="50" placeholder="Write your notes here..."></textarea><br>
+    <button onclick="saveNotes()">💾 Save</button>
+    <p id="status"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDabZP-vYvC0-dtmbIUGSKm1kxtpkM6gmE",
+      authDomain: "wrekkesia-notes.firebaseapp.com",
+      projectId: "wrekkesia-notes",
+      storageBucket: "wrekkesia-notes.firebasestorage.app",
+      messagingSenderId: "1025156726068",
+      appId: "1:1025156726068:web:3a438b3094fdedcd04b961"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const loginSection = document.getElementById("login-section");
+    const notesSection = document.getElementById("notes-section");
+    const textarea = document.getElementById("player-notes");
+    const status = document.getElementById("status");
+
+    window.login = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          status.textContent = "Logged in!";
+        })
+        .catch((err) => {
+          status.textContent = "Login failed: " + err.message;
+        });
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        loginSection.style.display = "none";
+        notesSection.style.display = "block";
+        const noteRef = doc(db, "notes", user.uid);
+        const noteSnap = await getDoc(noteRef);
+        if (noteSnap.exists()) {
+          textarea.value = noteSnap.data().text || "";
+        }
+      }
+    });
+
+    window.saveNotes = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const noteRef = doc(db, "notes", user.uid);
+        await setDoc(noteRef, { text: textarea.value });
+        status.textContent = "Notes saved!";
+      }
+    };
+  </script>
+</body>
+</html>
