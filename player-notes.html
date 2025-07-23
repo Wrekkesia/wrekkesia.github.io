@@ -2,72 +2,41 @@
 <html>
 <head>
   <title>Player Notes - Wrekkesia</title>
-</head>
   <style>
     body {
-      background-color: #111;
-      color: #f5f5f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #1f1f1f;
-      text-align: center;
-      border-bottom: 2px solid #444;
-    }
-    header img {
-      width: 100%;
-      max-height: 350px;
-      object-fit: cover;
-    }
-    header h1 {
-      font-size: 2.5rem;
-      margin: 0;
-      padding: 1rem;
-      color: #cfa13f;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
       padding: 2rem;
-      flex-wrap: wrap;
     }
-    nav a {
-      background-color: #222;
-      border: 1px solid #555;
-      border-radius: 12px;
-      padding: 1rem 2rem;
-      text-decoration: none;
-      color: #f5f5f5;
-      font-weight: bold;
-      transition: all 0.2s ease-in-out;
+    input, textarea {
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 400px;
     }
-    nav a:hover {
-      background-color: #333;
-      border-color: #cfa13f;
-      color: #cfa13f;
+    button {
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      cursor: pointer;
     }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      color: #777;
-      font-size: 0.9rem;
-    }
+    #status { margin-top: 1rem; color: #7fffd4; }
   </style>
 </head>
 <body>
-  <header>
-    <img src="header-image1.jpg" alt="Wrekkesia Banner" />
-  </header>
 
   <h1>📘 Player Notes</h1>
   <p>Only you can see your notes.</p>
 
-  <div id="login-section">
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
+  <div id="auth-section">
+    <h2>Register</h2>
+    <input type="email" id="register-email" placeholder="Email" />
+    <input type="password" id="register-password" placeholder="Password" />
+    <button onclick="register()">Register</button>
+
+    <h2 style="margin-top:2rem;">Login</h2>
+    <input type="email" id="login-email" placeholder="Email" />
+    <input type="password" id="login-password" placeholder="Password" />
     <button onclick="login()">Login</button>
   </div>
 
@@ -75,53 +44,78 @@
     <textarea id="player-notes" rows="10" cols="50" placeholder="Write your notes here..."></textarea><br>
     <button onclick="saveNotes()">💾 Save</button>
     <p id="status"></p>
+    <button onclick="logout()">🚪 Logout</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDabZP-vYvC0-dtmbIUGSKm1kxtpkM6gmE",
+       apiKey: "AIzaSyDabZP-vYvC0-dtmbIUGSKm1kxtpkM6gmE",
       authDomain: "wrekkesia-notes.firebaseapp.com",
       projectId: "wrekkesia-notes",
       storageBucket: "wrekkesia-notes.firebasestorage.app",
       messagingSenderId: "1025156726068",
       appId: "1:1025156726068:web:3a438b3094fdedcd04b961"
-
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    const loginSection = document.getElementById("login-section");
+    const authSection = document.getElementById("auth-section");
     const notesSection = document.getElementById("notes-section");
     const textarea = document.getElementById("player-notes");
     const status = document.getElementById("status");
 
+    window.register = () => {
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          status.textContent = "🎉 Registered and logged in!";
+        })
+        .catch(err => {
+          status.textContent = "⚠️ Registration error: " + err.message;
+        });
+    };
+
     window.login = () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          status.textContent = "Logged in!";
+          status.textContent = "✅ Logged in!";
         })
-        .catch((err) => {
-          status.textContent = "Login failed: " + err.message;
+        .catch(err => {
+          status.textContent = "⚠️ Login failed: " + err.message;
         });
+    };
+
+    window.logout = () => {
+      signOut(auth).then(() => {
+        status.textContent = "🚪 Logged out.";
+      });
     };
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        loginSection.style.display = "none";
+        authSection.style.display = "none";
         notesSection.style.display = "block";
+
         const noteRef = doc(db, "notes", user.uid);
         const noteSnap = await getDoc(noteRef);
         if (noteSnap.exists()) {
           textarea.value = noteSnap.data().text || "";
         }
+      } else {
+        authSection.style.display = "block";
+        notesSection.style.display = "none";
+        textarea.value = "";
       }
     });
 
@@ -130,7 +124,7 @@
       if (user) {
         const noteRef = doc(db, "notes", user.uid);
         await setDoc(noteRef, { text: textarea.value });
-        status.textContent = "Notes saved!";
+        status.textContent = "💾 Notes saved!";
       }
     };
   </script>
