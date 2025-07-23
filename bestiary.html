@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wrekkesia Bestiary</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1f1f1f;
+      text-align: center;
+      border-bottom: 2px solid #444;
+    }
+    header img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      padding: 1rem;
+      color: #cfa13f;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .alphabet-index {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .alphabet-index a {
+      color: #cfa13f;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .bestiary-section {
+      margin-bottom: 3rem;
+    }
+    .bestiary-section h2 {
+      color: #cfa13f;
+      border-bottom: 1px solid #333;
+      padding-bottom: 0.5rem;
+    }
+    .bestiary-section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .bestiary-section li {
+      padding: 0.3rem 0;
+    }
+    .bestiary-section a {
+      color: #f5f5f5;
+      text-decoration: none;
+    }
+    .bestiary-section a:hover {
+      color: #cfa13f;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="header-image.jpg" alt="Wrekkesia Banner" />
+    <h1>Wrekkesia Bestiary</h1>
+  </header>
+
+  <div class="container">
+    <div class="alphabet-index">
+      <a href="#A">A</a>
+      <a href="#B">B</a>
+      <a href="#C">C</a>
+      <a href="#D">D</a>
+      <!-- ...continue as needed -->
+      <a href="#Z">Z</a>
+    </div>
+
+    <div class="bestiary-section" id="A">
+      <h2>A</h2>
+      <ul>
+        <li><a href="creatures/arachlor.html">Arachlor</a></li>
+        <!-- Add more A-creatures here -->
+      </ul>
+    </div>
+
+    <div class="bestiary-section" id="B">
+      <h2>B</h2>
+      <ul>
+        <li><a href="creatures/bloodfang.html">Bloodfang</a></li>
+        <!-- Add more B-creatures here -->
+      </ul>
+    </div>
+
+    <!-- Add more sections for C through Z -->
+  </div>
+</body>
+</html>
