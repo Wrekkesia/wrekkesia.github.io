@@ -1,57 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Player Notes - Wrekkesia</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player Journal</title>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <style>
-    body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      padding: 2rem;
-    }
-    input, textarea {
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      width: 100%;
-      max-width: 400px;
-    }
-    button {
-      padding: 0.5rem 1rem;
-      margin-top: 0.5rem;
-      cursor: pointer;
-    }
-    #status { margin-top: 1rem; color: #7fffd4; }
+    body { background-color: #111; color: #f5f5f5; font-family: Arial, sans-serif; padding: 2rem; }
+    .entry { border: 1px solid #333; margin-bottom: 1rem; padding: 1rem; background: #1c1c1c; border-radius: 8px; }
+    .entry:hover { background-color: #222; cursor: pointer; }
+    input, textarea, button { display: block; width: 100%; margin-top: 1rem; padding: 0.5rem; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; }
+    button:hover { background-color: #333; cursor: pointer; }
+    #logoutBtn { width: auto; float: right; margin-bottom: 1rem; }
   </style>
 </head>
 <body>
+  <h1>📓 Player Journal</h1>
+  <button id="logoutBtn">Logout</button>
+  <div id="entryList"></div>
+  <hr/>
+  <h2 id="formTitle">New Entry</h2>
+  <input type="text" id="entryTitle" placeholder="Title" />
+  <textarea id="entryContent" rows="8" placeholder="Write your notes here..."></textarea>
+  <button id="saveEntry">Save Entry</button>
+  <button id="deleteEntry" style="display:none">Delete Entry</button>
 
-  <h1>📘 Player Notes</h1>
-  <p>Only you can see your notes.</p>
-
-  <div id="auth-section">
-    <h2>Register</h2>
-    <input type="email" id="register-email" placeholder="Email" />
-    <input type="password" id="register-password" placeholder="Password" />
-    <button onclick="register()">Register</button>
-
-    <h2 style="margin-top:2rem;">Login</h2>
-    <input type="email" id="login-email" placeholder="Email" />
-    <input type="password" id="login-password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-  </div>
-
-  <div id="notes-section" style="display:none;">
-    <textarea id="player-notes" rows="10" cols="50" placeholder="Write your notes here..."></textarea><br>
-    <button onclick="saveNotes()">💾 Save</button>
-    <p id="status"></p>
-    <button onclick="logout()">🚪 Logout</button>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
+  <script>
     const firebaseConfig = {
        apiKey: "AIzaSyDabZP-vYvC0-dtmbIUGSKm1kxtpkM6gmE",
       authDomain: "wrekkesia-notes.firebaseapp.com",
@@ -60,73 +36,83 @@
       messagingSenderId: "1025156726068",
       appId: "1:1025156726068:web:3a438b3094fdedcd04b961"
     };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+    const entryList = document.getElementById("entryList");
+    const titleInput = document.getElementById("entryTitle");
+    const contentInput = document.getElementById("entryContent");
+    const saveBtn = document.getElementById("saveEntry");
+    const deleteBtn = document.getElementById("deleteEntry");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const formTitle = document.getElementById("formTitle");
 
-    const authSection = document.getElementById("auth-section");
-    const notesSection = document.getElementById("notes-section");
-    const textarea = document.getElementById("player-notes");
-    const status = document.getElementById("status");
+    let currentUser = null;
+    let currentEntryId = null;
 
-    window.register = () => {
-      const email = document.getElementById("register-email").value;
-      const password = document.getElementById("register-password").value;
+    logoutBtn.addEventListener('click', () => auth.signOut());
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          status.textContent = "🎉 Registered and logged in!";
-        })
-        .catch(err => {
-          status.textContent = "⚠️ Registration error: " + err.message;
-        });
-    };
-
-    window.login = () => {
-      const email = document.getElementById("login-email").value;
-      const password = document.getElementById("login-password").value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          status.textContent = "✅ Logged in!";
-        })
-        .catch(err => {
-          status.textContent = "⚠️ Login failed: " + err.message;
-        });
-    };
-
-    window.logout = () => {
-      signOut(auth).then(() => {
-        status.textContent = "🚪 Logged out.";
-      });
-    };
-
-    onAuthStateChanged(auth, async (user) => {
+    auth.onAuthStateChanged(user => {
       if (user) {
-        authSection.style.display = "none";
-        notesSection.style.display = "block";
-
-        const noteRef = doc(db, "notes", user.uid);
-        const noteSnap = await getDoc(noteRef);
-        if (noteSnap.exists()) {
-          textarea.value = noteSnap.data().text || "";
-        }
+        currentUser = user;
+        loadEntries();
       } else {
-        authSection.style.display = "block";
-        notesSection.style.display = "none";
-        textarea.value = "";
+        window.location.href = "/login.html"; // Replace with your login page
       }
     });
 
-    window.saveNotes = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const noteRef = doc(db, "notes", user.uid);
-        await setDoc(noteRef, { text: textarea.value });
-        status.textContent = "💾 Notes saved!";
+    function loadEntries() {
+      db.collection("notes").doc(currentUser.uid).collection("entries").orderBy("timestamp", "desc")
+        .onSnapshot(snapshot => {
+          entryList.innerHTML = "";
+          snapshot.forEach(doc => {
+            const entry = doc.data();
+            const div = document.createElement("div");
+            div.className = "entry";
+            div.innerText = entry.title;
+            div.onclick = () => loadEntry(doc.id, entry);
+            entryList.appendChild(div);
+          });
+        });
+    }
+
+    function loadEntry(id, entry) {
+      titleInput.value = entry.title;
+      contentInput.value = entry.content;
+      currentEntryId = id;
+      formTitle.textContent = "Edit Entry";
+      deleteBtn.style.display = "block";
+    }
+
+    saveBtn.onclick = async () => {
+      const title = titleInput.value.trim();
+      const content = contentInput.value.trim();
+      if (!title || !content) return;
+      const data = { title, content, timestamp: new Date() };
+      if (currentEntryId) {
+        await db.collection("notes").doc(currentUser.uid).collection("entries").doc(currentEntryId).set(data);
+      } else {
+        await db.collection("notes").doc(currentUser.uid).collection("entries").add(data);
       }
+      titleInput.value = "";
+      contentInput.value = "";
+      currentEntryId = null;
+      formTitle.textContent = "New Entry";
+      deleteBtn.style.display = "none";
     };
+
+    deleteBtn.onclick = async () => {
+      if (currentEntryId) {
+        await db.collection("notes").doc(currentUser.uid).collection("entries").doc(currentEntryId).delete();
+        titleInput.value = "";
+        contentInput.value = "";
+        currentEntryId = null;
+        formTitle.textContent = "New Entry";
+        deleteBtn.style.display = "none";
+      }
+    }
   </script>
 </body>
 </html>
