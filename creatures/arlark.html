@@ -86,7 +86,42 @@
       text-decoration: underline;
     }
 
+    /* Search Panel */
+    .search-panel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 250px;
+      background-color: #1e1e2f;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      z-index: 100;
+    }
+
+    .search-panel input {
+      width: 100%;
+      padding: 10px;
+      background-color: #0f0f1f;
+      border: none;
+      border-radius: 4px;
+      color: #cfcaf7;
+      font-size: 1em;
+    }
+
+    .search-panel label {
+      font-size: 0.9em;
+      color: #aaa;
+      margin-bottom: 6px;
+      display: block;
+    }
+
     @media (max-width: 768px) {
+      .entry-callout {
+        flex-direction: column;
+        align-items: center;
+      }
+
       .entry-callout {
         flex-direction: column;
         align-items: center;
@@ -99,6 +134,12 @@
 
       .entry-info {
         grid-template-columns: 1fr;
+      }
+
+      .search-panel {
+        position: static;
+        width: 100%;
+        margin-bottom: 20px;
       }
       
     #homeBtn {
@@ -126,30 +167,49 @@
   <header>
     <img src="header-image.jpg" alt="Wrekkesia Banner" />
   </header>
-  <div class="bestiary-entry">
-    <h1>Arlark</h1>
-    <img class="entry-image" src="arlark-image.png" alt="Arlark" />
-
-     <div class="entry-callout">
-      <img class="entry-image" src="arlark-image.png" alt="Arlark creature" />
-
-      <div class="entry-info">
-        <div><span>Name:</span> Arlark</div>
-        <div><span>Size:</span> Medium, 5 - 7ft tall from shoulder to hoof</div>
-        <div><span>Region:</span> Across Wrekkesia</div>
-        <div><span>Temperament:</span> Passive unless attacked</div>
-        <div><span>Weakness:</span> Dependent on variant</div>
-        <div><span>Powers/Abilities:</span> Dependent on variant</div>
-        <div><span>Uses/Drops:</span> Common food source, with variant-based meat flavors</div>
-        <div><span>Power Ranking:</span> 3</div>
+  <div class="search-panel">
+    <label for="searchInput">Search Bestiary</label>
+    <input type="text" id="searchInput" placeholder="Type to filter..." oninput="filterEntries()"/>
+  </div>
+  
+  <div id="bestiary">
+    <!-- Example Entry -->
+    <div class="bestiary-entry">
+      <h1>Arlark Mortum Pass and Stygian Pass Variant</h1>
+      <div class="entry-callout">
+        <img class="entry-image" src="arlark-image.png" alt="Arlark creature" />
+        <div class="entry-info">
+          <div><span>Name:</span> Arlark</div>
+          <div><span>Size:</span> Medium, 5 - 7ft tall from shoulder to hoof</div>
+          <div><span>Region:</span> Across Wrekkesia</div>
+          <div><span>Temperament:</span> Passive unless attacked</div>
+          <div><span>Weakness:</span> Dependent on variant</div>
+          <div><span>Powers/Abilities:</span> Dependent on variant</div>
+          <div><span>Uses/Drops:</span> Common food source, with variant-based meat flavors</div>
+          <div><span>Power Ranking:</span> 3</div>
+        </div>
+      </div>
+      <div class="entry-description">
+        The Arlark is Wrekkesia's most common deer-like creature. It is unique in that it has such varying forms depending on where it's found. In the 
+        <a href="#">Stygian Pass</a> and <a href="#">Mortum Pass</a> areas, for example, the Arlark variant does not have any meat to collect from killing it. Instead, its bones are much stronger, and are composed of a very sweet, sought after marrow that high level chefs seek in rare and delicate dishes. The 
+        <a href="#">Blood Wood</a> variant is the only Arlark variant who is entirely carnivorous and will eat any kind of meat it can get its sharp teeth around. Regardless of where one is, there's probably an Arlark variant nearby.
       </div>
     </div>
 
-    <div class="entry-description">
-      The Arlark is Wrekkesia's most common deer-like creature. It is unique in that it has such varying forms depending on where it's found. In the 
-      <a href="#">Stygian Pass</a> and <a href="#">Mortum Pass</a> areas, for example, the Arlark variant does not have any meat to collect from killing it. Instead, its bones are much stronger, and are composed of a very sweet, sought after marrow that high level chefs seek in rare and delicate dishes. The 
-      <a href="#">Blood Wood</a> variant is the only Arlark variant who is entirely carnivorous and will eat any kind of meat it can get its sharp teeth around. Regardless of where one is, there's probably an Arlark variant nearby.
-    </div>
+    <!-- Add more .bestiary-entry blocks here -->
+
   </div>
+
+  <script>
+    function filterEntries() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const entries = document.querySelectorAll('.bestiary-entry');
+
+      entries.forEach(entry => {
+        const text = entry.innerText.toLowerCase();
+        entry.style.display = text.includes(input) ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
