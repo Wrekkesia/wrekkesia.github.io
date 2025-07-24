@@ -52,7 +52,13 @@
     let currentUser = null;
     let currentEntryId = null;
 
-    logoutBtn.addEventListener('click', () => auth.signOut());
+    logoutBtn.addEventListener('click', () => {
+    auth.signOut().then(() => {
+    window.location.href = "/login.html"; // or "./login.html" depending on structure
+  }).catch(error => {
+    console.error("Logout error:", error);
+  });
+});
 
 auth.onAuthStateChanged(user => {
   if (user) {
