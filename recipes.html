@@ -154,6 +154,20 @@ button {
       </table>
     </main>
   </div>
+<script>
+    // === PASSWORD CONFIGURATION ===
+  const correctPassword = "Pudge"; // 🔐 Set your password here
 
+  function checkPassword() {
+    const input = document.getElementById("password").value;
+    const error = document.getElementById("error-message");
+    if (input === correctPassword) {
+      document.getElementById("login").style.display = "none";
+      document.getElementById("protected-content").style.display = "block";
+    } else {
+      error.textContent = "Incorrect password. Try again.";
+    }
+  }
+</script>
 </body>
 </html>
