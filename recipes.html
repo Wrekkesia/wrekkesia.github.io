@@ -13,21 +13,18 @@ body {
   padding: 0;
   height: 100vh;
 }
-
 header {
   width: 100%;
   background-color: #1f1f1f;
   text-align: center;
   border-bottom: 2px solid #444;
 }
-
 header img {
   width: 100%;
   max-height: 350px;
   object-fit: cover;
   display: block;
 }
-
 #login {
   display: flex;
   flex-direction: column;
@@ -35,47 +32,45 @@ header img {
   justify-content: center;
   height: calc(100vh - 350px); /* Account for header height */
 }
-
 #protected-content {
   display: none;
   height: calc(100vh - 350px);
   position: relative;
 }
-
 main {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
-
 table {
   border-collapse: collapse;
   background: #2a2a2a;
   width: 70%;
 }
-
 th, td {
   border: 1px solid #444;
   padding: 12px;
   text-align: left;
 }
-
 th {
   background-color: #333;
 }
-
+.recipe-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
 .input-box {
   padding: 10px;
   margin-top: 20px;
 }
-
 input[type="password"] {
   padding: 8px;
   border: none;
   border-radius: 4px;
 }
-
 button {
   padding: 8px 12px;
   border: none;
@@ -84,12 +79,10 @@ button {
   color: white;
   cursor: pointer;
 }
-
 .error {
   color: red;
   margin-top: 10px;
 }
-
 #homeBtn {
   position: fixed;
   top: 1rem;
@@ -104,13 +97,13 @@ button {
   transition: background-color 0.2s ease;
   z-index: 1000;
 }
-
 #homeBtn:hover {
   background-color: #333;
   cursor: pointer;
 }
-  </style>
+</style>
 </head>
+
 <body>
   
 <header>
@@ -136,21 +129,24 @@ button {
       <table>
         <thead>
           <tr>
+            <th>Image</th>
             <th>Recipe</th>
             <th>Ingredients</th>
-            <th>Time</th>
+            <th>Buff</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Spaghetti Bolognese</td>
-            <td>Pasta, beef, tomato sauce</td>
-            <td>30 min</td>
+            <td><img src="Keilr-Rump.jpg" alt="Roasted Keilr Rump" class="recipe-img" /></td>
+            <td>Roasted Keilr Elk</td>
+            <td>3 Keilr Elk rump and 2 salt</td>
+            <td>Unkown</td>
           </tr>
           <tr>
-            <td>Grilled Cheese</td>
-            <td>Bread, cheese, butter</td>
-            <td>10 min</td>
+            <td><img src="Frosted-Glowmoth-Wings.jpg" alt="Frosted Glowmoth Wings" class="recipe-img" /></td>
+            <td>Frosted Glowmoth Wings</td>
+            <td>8 Glowmoth Wings and 3 sugar</td>
+            <td>Unknown</td>
           </tr>
         </tbody>
       </table>
