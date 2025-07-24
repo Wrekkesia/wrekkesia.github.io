@@ -68,6 +68,24 @@
       color: #cfa13f;
       text-decoration: underline;
     }
+    #homeBtn {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+      z-index: 1000;
+}
+#homeBtn:hover {
+  background-color: #333;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
@@ -104,5 +122,6 @@
 
     <!-- Add more sections for C through Z -->
   </div>
+  <a id="homeBtn" href="index.html">🏠 Home</a>
 </body>
 </html>
