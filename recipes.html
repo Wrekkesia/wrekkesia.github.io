@@ -3,12 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Protected Page</title>
+  <title>Recipes</title>
   <style>
     body {
       font-family: sans-serif;
       background: #1a1a1a;
       color: white;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+    }
+
+    #login {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -18,6 +24,37 @@
 
     #protected-content {
       display: none;
+      height: 100vh;
+      position: relative;
+    }
+
+    header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      background: #2a2a2a;
+      width: 70%;
+    }
+
+    th, td {
+      border: 1px solid #444;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #333;
     }
 
     .input-box {
@@ -58,8 +95,32 @@
   </div>
 
   <div id="protected-content">
-    <h1>🎉 Welcome to the Recipes Page!</h1>
-    <p>This content is only visible if the password is correct.</p>
+    <header>
+      <h1>🎉 Welcome to the Recipes Page!</h1>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Recipe</th>
+            <th>Ingredients</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Spaghetti Bolognese</td>
+            <td>Pasta, beef, tomato sauce</td>
+            <td>30 min</td>
+          </tr>
+          <tr>
+            <td>Grilled Cheese</td>
+            <td>Bread, cheese, butter</td>
+            <td>10 min</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
   </div>
 
   <script>
