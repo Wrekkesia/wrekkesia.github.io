@@ -28,6 +28,79 @@
       padding: 1rem;
       color: #cfa13f;
     }
+     .bestiary-entry {
+      max-width: 1000px;
+      margin: auto;
+      background-color: #121212;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(100, 100, 255, 0.2);
+    }
+
+    .entry-callout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+
+    .entry-image {
+      flex: 0 0 300px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .entry-info {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .entry-info div {
+      background-color: #1c1c1c;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+
+    .entry-info span {
+      color: #bcb0ff;
+      font-weight: bold;
+    }
+
+    .entry-description {
+      background-color: #1a1a1a;
+      padding: 15px;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
+
+    a {
+      color: #9ab4ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .entry-callout {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .entry-image {
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .entry-info {
+        grid-template-columns: 1fr;
+      }
+      
     #homeBtn {
       position: fixed;
       top: 1rem;
@@ -57,15 +130,19 @@
     <h1>Arlark</h1>
     <img class="entry-image" src="arlark-image.png" alt="Arlark" />
 
-    <div class="entry-info">
-      <div><span>Name:</span> Arlark</div>
-      <div><span>Size:</span> Medium, 5 - 7ft tall from shoulder to hoof</div>
-      <div><span>Region:</span> Across Wrekkesia</div>
-      <div><span>Temperament:</span> Passive unless attacked</div>
-      <div><span>Weakness:</span> Dependent on variant</div>
-      <div><span>Powers/Abilities:</span> Dependent on variant</div>
-      <div><span>Uses/Drops:</span> Common food source, with variant-based meat flavors</div>
-      <div><span>Power Ranking:</span> 3</div>
+     <div class="entry-callout">
+      <img class="entry-image" src="arlark-image.png" alt="Arlark creature" />
+
+      <div class="entry-info">
+        <div><span>Name:</span> Arlark</div>
+        <div><span>Size:</span> Medium, 5 - 7ft tall from shoulder to hoof</div>
+        <div><span>Region:</span> Across Wrekkesia</div>
+        <div><span>Temperament:</span> Passive unless attacked</div>
+        <div><span>Weakness:</span> Dependent on variant</div>
+        <div><span>Powers/Abilities:</span> Dependent on variant</div>
+        <div><span>Uses/Drops:</span> Common food source, with variant-based meat flavors</div>
+        <div><span>Power Ranking:</span> 3</div>
+      </div>
     </div>
 
     <div class="entry-description">
