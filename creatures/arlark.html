@@ -128,44 +128,44 @@
     background-color: #1a1a30;
   }
 
-      .entry-callout {
-        flex-direction: column;
-        align-items: center;
-      }
+  .entry-callout {
+    flex-direction: column;
+    align-items: center;
+  }
 
-      .entry-image {
-        width: 100%;
-        max-width: 200px;
-      }
+  .entry-image {
+    width: 100%;
+    max-width: 200px;
+  }
 
-      .entry-info {
-        grid-template-columns: 1fr;
-      }
+  .entry-info {
+    grid-template-columns: 1fr;
+  }
 
-      .search-panel {
-        position: static;
-        width: 100%;
-        margin-bottom: 20px;
-      }
+  .search-panel {
+    position: static;
+    width: 100%;
+    margin-bottom: 20px;
+  }
       
-    #homeBtn {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #222;
-      color: #fff;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background-color 0.2s ease;
-      z-index: 1000;
+  #homeBtn {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    z-index: 1000;
 }
 
-    #homeBtn:hover {
-      background-color: #333;
-      cursor: pointer;
+  #homeBtn:hover {
+    background-color: #333;
+    cursor: pointer;
 }
       
 </style>
@@ -175,13 +175,15 @@
   <header>
     <img src="header-image.jpg" alt="Wrekkesia Banner" />
   </header>
+  
+  <a id="homeBtn" href="index.html">🏠 Home</a>
+  
   <div class="search-panel">
     <label for="searchInput">Search Bestiary</label>
     <input type="text" id="searchInput" placeholder="Search..." oninput="filterEntries()"/>
   </div>
   
   <div id="bestiary">
-    <!-- Example Entry -->
     <div class="bestiary-entry">
       <h1>Arlark</h1>
       <div class="entry-callout">
@@ -197,15 +199,13 @@
           <div><span>Power Ranking:</span> 3</div>
         </div>
       </div>
+      
       <div class="entry-description">
         The Arlark is Wrekkesia's most common deer-like creature. It is unique in that it has such varying forms depending on where it's found. In the 
         <a href="#">Stygian Pass</a> and <a href="#">Mortum Pass</a> areas, for example, the Arlark variant does not have any meat to collect from killing it. Instead, its bones are much stronger, and are composed of a very sweet, sought after marrow that high level chefs seek in rare and delicate dishes. The 
         <a href="#">Blood Wood</a> variant is the only Arlark variant who is entirely carnivorous and will eat any kind of meat it can get its sharp teeth around. Regardless of where one is, there's probably an Arlark variant nearby.
       </div>
     </div>
-
-    <!-- Add more .bestiary-entry blocks here -->
-
   </div>
 
   <script>
@@ -219,6 +219,5 @@
       });
     }
   </script>
-<a id="homeBtn" href="index.html">🏠 Home</a>
-</body>
+  </body>
 </html>
